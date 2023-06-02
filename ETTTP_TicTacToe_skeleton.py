@@ -358,10 +358,27 @@ def check_msg(msg, recv_ip):
     '''
     Function that checks if received message is ETTTP format
     '''
-    ###################  Fill Out  #######################
 
-    
+    # Split the message into lines
+    lines = msg.split("\r\n")
 
+    # Check if the first line starts with "ETTTP"
+    if not lines[0].startswith("ETTTP"):
+        print("Invalid message format: First line does not start with 'ETTTP'")
+        return False
+
+    # Check if the host IP is specified in the message
+    host_line = [line for line in lines if line.startswith("Host:")]
+    if not host_line:
+        print("Invalid message format: Host IP is missing")
+        return False
+
+    # Extract the host IP from the host line
+    host_ip = host_line[0].split(":")[1].strip()
+
+    # Check if the host IP matches the expected receiver IP
+    if host_ip != recv_ip:
+        print("Invalid message format: Host IP does not match the expected receiver IP")
+        return False
 
     return True
-    ######################################################  
