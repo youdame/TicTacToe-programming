@@ -246,13 +246,13 @@ class TTT(tk.Tk):
             ack_msg = f"ACK ETTTP/1.0\r\nHost:127.0.0.1\r\nNew-Move:{loc_str}\r\n\r\n"
             self.socket.send(ack_msg.encode())
 
-            # Update board and change turn
-            self.update_board(self.computer, loc, get=True)
-            if self.state == self.active:
-                self.my_turn = 1
-                self.l_status_bullet.config(fg='green')
-                self.l_status['text'] = 'Ready'
-    
+        # Update board and change turn
+        self.update_board(self.computer, loc, get=True)
+        if self.state == self.active:
+            self.my_turn = 1
+            self.l_status_bullet.config(fg='green')
+            self.l_status['text'] = 'Ready'
+
     def send_debug(self):
         '''
         Function to send message to peer using input from the textbox
@@ -277,10 +277,12 @@ class TTT(tk.Tk):
         loc_str = loc_line[0].split(":")[1].strip()
         loc = eval(loc_str)  # Convert the move location string to a tuple
 
-        row, col = divmod(self.loc, self.line_size)
+        row, col = loc
+        loc = 3 * row + col
+        
         
         # Check if the selected location is already taken or not
-        if self.board[row][col] != " ":
+        if self.board[loc] != 0:
             print("Invalid move: Location already taken")
             return
 
@@ -308,7 +310,7 @@ class TTT(tk.Tk):
         ######################################################
 
         #vvvvvvvvvvvvvvvvvvv  DO NOT CHANGE  vvvvvvvvvvvvvvvvvvv
-        self.update_board(self.user, self.loc)
+        self.update_board(self.user, loc)
 
         if self.state == self.active:    # always after my move
             self.my_turn = 0
