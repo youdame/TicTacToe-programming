@@ -32,6 +32,10 @@ if __name__ == '__main__':
         # Receive who will start first from the server
         recv_header = client_socket.recv(SIZE).decode()
 
+         # Check if the message is valid
+        if not check_msg(recv_header, SERVER_IP):
+            client_socket.close()
+        
         # 1차적으로 : send 뒤에 문자열을 변수로 가져오고 (ack 그대로 보내는 것 용도)
         split_message = recv_header.split("SEND ")[1]
 
