@@ -268,25 +268,24 @@ class TTT(tk.Tk):
         d_msg = d_msg.replace("\\r\\n", "\r\n")   # Sanitize the message as \r\n may be modified when given as input
         self.t_debug.delete(1.0, "end")
 
-        ###################  Fill Out  #######################
-        '''
-        Check if the selected location is already taken or not
-        '''
+        # Extract the move location from the message
+        loc_line = [line for line in d_msg.split("\r\n") if line.startswith("New-Move:")]
+        if not loc_line:
+            print("Invalid message format: Move location is missing")
+            return
 
-        # Get the selected location from self.loc
+        loc_str = loc_line[0].split(":")[1].strip()
+        loc = eval(loc_str)  # Convert the move location string to a tuple
+
         row, col = divmod(self.loc, self.line_size)
-
-        # Check if the selected location is already taken
+        
+        # Check if the selected location is already taken or not
         if self.board[row][col] != " ":
             print("Invalid move: Location already taken")
             return
 
-        '''
-        Send message to peer
-        '''
-
         # Create the ETTTP request message
-        message = f"SEND ETTTP/1.0\r\nHost:127.0.0.1\r\nNew-Move:({row},{col})\r\n\r\n"
+        message = f"SEND ETTTP/1.0\r\nHost:127.0.0.1\r\nNew-Move:{loc_str}\r\n\r\n"
 
         # Send the message to the peer using TCP socket
         try:
