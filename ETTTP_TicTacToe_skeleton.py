@@ -260,41 +260,65 @@ class TTT(tk.Tk):
         '''
 
         if not self.my_turn:
-            self.t_debug.delete(1.0,"end")
+            self.t_debug.delete(1.0, "end")
             return
-        # get message from the input box
-        d_msg = self.t_debug.get(1.0,"end")
-        d_msg = d_msg.replace("\\r\\n","\r\n")   # msg is sanitized as \r\n is modified when it is given as input
-        self.t_debug.delete(1.0,"end")
-        
+
+        # Get message from the input box
+        d_msg = self.t_debug.get(1.0, "end")
+        d_msg = d_msg.replace("\\r\\n", "\r\n")   # Sanitize the message as \r\n may be modified when given as input
+        self.t_debug.delete(1.0, "end")
+
         ###################  Fill Out  #######################
         '''
         Check if the selected location is already taken or not
         '''
 
+        # Get the selected location from self.loc
+        row, col = self.loc
+
+        # Check if the selected location is already taken
+        if self.board[row][col] != " ":
+            print("Invalid move: Location already taken")
+            return
+
         '''
         Send message to peer
         '''
-        
-        '''
-        Get ack
-        '''
-        
-        loc = 5 # peer's move, from 0 to 8
 
-        ######################################################  
+        # Create the ETTTP request message
+        message = f"SEND ETTTP/1.0\r\nHost:{self.send_ip}\r\nNew-Move:({row},{col})\r\n\r\n"
+
+        # Send the message to the peer using TCP socket
+        try:
+            self.socket.sendall(message.encode())
+            # Wait for acknowledgement from the peer
+            ack = self.socket.recv(1024).decode()
+
+            # Process the acknowledgement message
+
+            # Check if the acknowledgement is valid
+            if ack.startswith("ACK ETTTP/1.0"):
+                print("Message sent successfully")
+            else:
+                print("Error sending message to peer")
+                return
+        except socket.error as e:
+            print(f"Error sending message to peer: {e}")
+            return
+
         
+        ######################################################
+
         #vvvvvvvvvvvvvvvvvvv  DO NOT CHANGE  vvvvvvvvvvvvvvvvvvv
         self.update_board(self.user, loc)
-            
+
         if self.state == self.active:    # always after my move
             self.my_turn = 0
             self.l_status_bullet.config(fg='red')
-            self.l_status ['text'] = ['Hold']
-            _thread.start_new_thread(self.get_move,())
-            
+            self.l_status['text'] = ['Hold']
+            _thread.start_new_thread(self.get_move, ())
         #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-        
+
         
     def send_move(self,selection):
         '''
