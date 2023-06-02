@@ -27,8 +27,8 @@ class TTT(tk.Tk):
         self.active = 'GAME ACTIVE'
         self.socket = target_socket
         
-        self.send_ip = dst_addr
-        self.recv_ip = src_addr
+        self.send_ip = dst_addr # 나 
+        self.recv_ip = src_addr # 상대
         
         self.total_cells = 9
         self.line_size = 3
@@ -216,7 +216,7 @@ class TTT(tk.Tk):
         '''
         msg = self.socket.recv(1024).decode()  # Get message using socket
 
-        msg_valid_check = check_msg(msg, self.send_ip)  # Check if the received message is valid
+        msg_valid_check = check_msg(msg, self.recv_ip)  # Check if the received message is valid
 
         if not msg_valid_check:  # Message is not valid
             self.socket.close()
