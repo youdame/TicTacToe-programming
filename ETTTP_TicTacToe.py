@@ -304,10 +304,7 @@ class TTT(tk.Tk):
             # Process the acknowledgement message
 
             # Check if the acknowledgement is valid
-            if ack.startswith("ACK ETTTP/1.0"):
-                print("Message sent successfully")
-            else:
-                print("Error sending message to peer")
+            if check_msg(ack, self.recv_ip):
                 return
         except socket.error as e:
             print(f"Error sending message to peer: {e}")
