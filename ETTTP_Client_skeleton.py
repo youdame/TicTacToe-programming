@@ -31,12 +31,14 @@ if __name__ == '__main__':
         ###################################################################
         # Receive who will start first from the server
         recv_header = client_socket.recv(SIZE).decode()
+
         # 1차적으로 : send 뒤에 문자열을 변수로 가져오고 (ack 그대로 보내는 것 용도)
-        split_message = recv_header.split("SEND ")
+        split_message = recv_header.split("SEND ")[1]
+
         # 2차적으로 : 첫 번째에서 만든 변수에서 YOU나 ME를 파싱해서 start 변수에 넣어주기
 
         # 주어진 메시지를 줄바꿈 문자('\r\n')을 기준으로 분할
-        lines = split_message[1].split("\r\n")
+        lines = split_message.split("\r\n")
 
         # 분할된 결과에서 'First-Move:'를 찾아 값을 추출
         for line in lines:
@@ -46,13 +48,17 @@ if __name__ == '__main__':
             
         if value == "YOU":
             start = 1
+            ack_message = "ETTTP/1.0\r\nHost:127.0.0.1\r\nFirst-Move:ME\r\n\r\n"
         elif value == "ME":
             start = 0
+            ack_message = "ETTTP/1.0\r\nHost:127.0.0.1\r\nFirst-Move:YOU\r\n\r\n"
     
         ######################### Fill Out ################################
         # Send ACK 
         # ACK 문자열 뒤에 한칸 띄어쓰기하고 첫 번쨰 변수 그대로 보내기
-        send_header = "ACK "+ split_message[1]
+        
+        
+        send_header = "ACK "+ ack_message
         client_socket.send(send_header.encode())
         
         ###################################################################
