@@ -34,13 +34,22 @@ if __name__ == '__main__':
         
         ###################################################################
         # Send start move information to peer
+        start_msg = "SEND ETTTP/1.0\r\nHost: 127.0.0.1\r\nFirst-Move:"
+        if start == 0:
+            start_msg += "ME\r\n\r\n"
+        else:
+            start_msg += "YOU\r\n\r\n"
+        client_socket.send(start_msg.encode())
     
-    
-        ######################### Fill Out ################################
-        # Receive ack - if ack is correct, start game
-        
-        
         ###################################################################
+        
+        # Receive ack - if ack is correct, start game
+        ack = client_socket.recv(SIZE).decode()
+        if ack == "ACK":
+            print("Game started.")
+        else:
+            print("Error in receiving ack. Exiting...")
+            break
         
         root = TTT(client=False,target_socket=client_socket, src_addr=MY_IP,dst_addr=client_addr[0])
         root.play(start_user=start)

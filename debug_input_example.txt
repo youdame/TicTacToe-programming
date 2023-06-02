@@ -1,0 +1,2 @@
+예제1: SEND ETTTP/1.0\r\nHost:127.0.0.1\r\nNew-Move:(1,2)\r\n\r\n
+예제2: SEND ETTTP/1.0\r\nHost:127.0.0.1\r\nNew-Move:(2,2)\r\n\r\n
