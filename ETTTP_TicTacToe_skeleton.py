@@ -305,7 +305,14 @@ class TTT(tk.Tk):
         ###################  Fill Out  #######################
 
         # send message and check ACK
-        
+        message = "SEND ETTTP/1.0\r\nHost:127.0.0.1\r\nNew-Move:("+row+","+col+")\r\n\r\n"  
+        self.socket.send(message.encode())
+
+        ack = self.socket.recv(SIZE).decode()
+
+        if "ACK" not in ack:
+            return False
+            
         return True
         ######################################################  
 
