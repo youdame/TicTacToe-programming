@@ -214,9 +214,9 @@ class TTT(tk.Tk):
         If is valid, send ACK message
         If is not, close socket and quit
         '''
-        msg = self.socket.recv(self.SIZE).decode()  # Get message using socket
+        msg = self.socket.recv(1024).decode()  # Get message using socket
 
-        msg_valid_check = check_msg(msg, self.dst_addr)  # Check if the received message is valid
+        msg_valid_check = check_msg(msg, self.send_ip)  # Check if the received message is valid
 
         if not msg_valid_check:  # Message is not valid
             self.socket.close()
@@ -243,7 +243,7 @@ class TTT(tk.Tk):
 
 
             # Send ACK message
-            ack_msg = f"ACK ETTTP/1.0\r\nHost:{self.src_addr}\r\nNew-Move:{loc_str}\r\n\r\n"
+            ack_msg = f"ACK ETTTP/1.0\r\nHost:{self.recv_ip}\r\nNew-Move:{loc_str}\r\n\r\n"
             self.socket.send(ack_msg.encode())
 
             # Update board and change turn
