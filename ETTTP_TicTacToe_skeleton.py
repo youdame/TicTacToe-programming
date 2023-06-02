@@ -352,7 +352,7 @@ class TTT(tk.Tk):
         # 만약 get이 false일 경우
         if not get:
             # 자신이 이긴 것을 상대 플레이어에게 알리기 위해 패킷 전송
-            send_packet = "RESULT ETTTP/1.0\r\nHost:127.0.0.1\r\nWinner:ME\r\n\r\n"
+            send_packet = "RESULT ETTTP/1.0\r\nHost:127.0.0.1\r\nWinner:"+winner+"\r\n\r\n"
             self.socket.send(send_packet.encode())
             # 상대에게 결과 패킷을 받음
             received_packet = self.socket.recv(SIZE).decode()
@@ -362,7 +362,7 @@ class TTT(tk.Tk):
             # 먼저 상대방에게 결과 패킷을 받음
             received_packet = self.socket.recv(SIZE).decode()
             # 자신의 결과를 담은 패킷을 상대에게 전송
-            send_packet = "RESULT ETTTP/1.0\r\nHost:127.0.0.1\r\nWinner:YOU\r\n\r\n"
+            send_packet = "RESULT ETTTP/1.0\r\nHost:127.0.0.1\r\nWinner:"+winner+"\r\n\r\n"
             self.socket.send(send_packet.encode())
 
         # 두 peer의 패킷이 같은지 확인 - 상대방과 나의 winner가 달라야 맞음
