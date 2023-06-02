@@ -362,10 +362,11 @@ def check_msg(msg, recv_ip):
     # Split the message into lines
     lines = msg.split("\r\n")
 
-    # Check if the first line starts with "ETTTP"
-    if not lines[0].startswith("ETTTP"):
-        print("Invalid message format: First line does not start with 'ETTTP'")
+    # Check if the first line contains "ETTTP"
+    if "ETTTP" not in lines[0]:
+        print("Invalid message format: First line does not contain 'ETTTP'")
         return False
+
 
     # Check if the host IP is specified in the message
     host_line = [line for line in lines if line.startswith("Host:")]
