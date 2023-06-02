@@ -252,7 +252,7 @@ class TTT(tk.Tk):
                 self.my_turn = 1
                 self.l_status_bullet.config(fg='green')
                 self.l_status['text'] = 'Ready'
-
+    
     def send_debug(self):
         '''
         Function to send message to peer using input from the textbox
@@ -274,7 +274,7 @@ class TTT(tk.Tk):
         '''
 
         # Get the selected location from self.loc
-        row, col = self.loc
+        row, col = divmod(self.loc, self.line_size)
 
         # Check if the selected location is already taken
         if self.board[row][col] != " ":
@@ -306,11 +306,10 @@ class TTT(tk.Tk):
             print(f"Error sending message to peer: {e}")
             return
 
-        
         ######################################################
 
         #vvvvvvvvvvvvvvvvvvv  DO NOT CHANGE  vvvvvvvvvvvvvvvvvvv
-        self.update_board(self.user, loc)
+        self.update_board(self.user, self.loc)
 
         if self.state == self.active:    # always after my move
             self.my_turn = 0
