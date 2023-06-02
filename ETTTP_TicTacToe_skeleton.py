@@ -407,8 +407,8 @@ def check_msg(msg, recv_ip):
     lines = msg.split("\r\n")
 
     # Check if the first line contains "ETTTP"
-    if "ETTTP" not in lines[0]:
-        print("Invalid message format: First line does not contain 'ETTTP'")
+    if "ETTTP/1.0" not in lines[0]:
+        print("Invalid message format: First line does not contain 'ETTTP/1.0'")
         return False
 
 
