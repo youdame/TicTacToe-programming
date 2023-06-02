@@ -349,11 +349,35 @@ class TTT(tk.Tk):
         # no skeleton
         ###################  Fill Out  #######################
 
+        # 만약 get이 false일 경우
+        if not get:
+            # 자신이 이긴 것을 상대 플레이어에게 알리기 위해 패킷 전송
+            send_packet = "RESULT ETTTP/1.0\r\nHost:127.0.0.1\r\nWinner:ME\r\n\r\n"
+            self.socket.send(send_packet.encode())
+            # 상대에게 결과 패킷을 받음
+            received_packet = self.socket.recv(SIZE).decode()
+
+        # 만약 get이 true일 경우
+        else:
+            # 먼저 상대방에게 결과 패킷을 받음
+            received_packet = self.socket.recv(SIZE).decode()
+            # 자신의 결과를 담은 패킷을 상대에게 전송
+            send_packet = "RESULT ETTTP/1.0\r\nHost:127.0.0.1\r\nWinner:YOU\r\n\r\n"
+            self.socket.send(send_packet.encode())
+
+        # 두 peer의 패킷이 같은지 확인 - 상대방과 나의 winner가 달라야 맞음
+        ## 내가 이겼을 경우, 나는 ME라는 값을 상대에게 보내야 하고, 상대에게는 YOU라는 값이 나에게 전달되어야 함
+        # if send_packet == received_packet:
+        #    return False
+            
+        send_packet_msg = send_packet.split("Winner:")
+        received_packet_msg = received_packet.split("Winner:")
+
+        if send_packet_msg[0] == received_packet_msg[0] and send_packet_msg[1] != received_packet_msg[1] :
+            return True
         
-
-
-        return True
-        ######################################################  
+        return False
+        ######################################################     
 
         
     #vvvvvvvvvvvvvvvvvvv  DO NOT CHANGE  vvvvvvvvvvvvvvvvvvv
