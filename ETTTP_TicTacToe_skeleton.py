@@ -214,31 +214,44 @@ class TTT(tk.Tk):
         If is valid, send ACK message
         If is not, close socket and quit
         '''
-        ###################  Fill Out  #######################
-        msg =  "message" # get message using socket
+        msg = self.socket.recv(self.SIZE).decode()  # Get message using socket
 
-        msg_valid_check = False
-         
-        
-        if msg_valid_check: # Message is not valid
-            self.socket.close()   
+        msg_valid_check = check_msg(msg, self.dst_addr)  # Check if the received message is valid
+
+        if not msg_valid_check:  # Message is not valid
+            self.socket.close()
             self.quit()
             return
         else:  # If message is valid - send ack, update board and change turn
+            lines = msg.split("\r\n")
 
-            loc = 5 # received next-move
+            # Extract the move location from the message
+            loc_line = [line for line in lines if line.startswith("New-Move:")]
+            if not loc_line:
+                print("Invalid message format: Move location is missing")
+                self.socket.close()
+                self.quit()
+                return
+
+            loc_str = loc_line[0].split(":")[1].strip()
+            loc = eval(loc_str)  # Convert the move location string to a tuple
+
             
-            ######################################################   
-            
-            
-            #vvvvvvvvvvvvvvvvvvv  DO NOT CHANGE  vvvvvvvvvvvvvvvvvvv
+            # Convert the move location tuple to the corresponding index value
+            row, col = loc
+            loc = 3 * row + col
+
+
+            # Send ACK message
+            ack_msg = f"ACK ETTTP/1.0\r\nHost:{self.src_addr}\r\nNew-Move:{loc_str}\r\n\r\n"
+            self.socket.send(ack_msg.encode())
+
+            # Update board and change turn
             self.update_board(self.computer, loc, get=True)
-            if self.state == self.active:  
+            if self.state == self.active:
                 self.my_turn = 1
                 self.l_status_bullet.config(fg='green')
-                self.l_status ['text'] = ['Ready']
-            #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-                
+                self.l_status['text'] = 'Ready'
 
     def send_debug(self):
         '''
