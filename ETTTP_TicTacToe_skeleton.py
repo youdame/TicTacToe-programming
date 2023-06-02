@@ -270,7 +270,6 @@ class TTT(tk.Tk):
 
         # Check if the message is valid
         if not check_msg(d_msg, self.recv_ip):
-            print("Invalid message format")
             return
         
         # Extract the move location from the message
