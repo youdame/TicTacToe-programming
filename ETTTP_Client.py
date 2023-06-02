@@ -1,12 +1,6 @@
 '''
-  ETTTP_Client_skeleton.py
- 
   34743-02 Information Communications
   Term Project on Implementation of Ewah Tic-Tac-Toe Protocol
- 
-  Skeleton Code Prepared by JeiHee Cho
-  May 24, 2023
- 
  '''
 
 import random
@@ -14,7 +8,7 @@ import tkinter as tk
 from socket import *
 import _thread
 
-from ETTTP_TicTacToe_skeleton import TTT, check_msg
+from ETTTP_TicTacToe import TTT, check_msg
     
 if __name__ == '__main__':
 
@@ -57,7 +51,7 @@ if __name__ == '__main__':
             start = 0
             ack_message = "ETTTP/1.0\r\nHost:127.0.0.1\r\nFirst-Move:YOU\r\n\r\n"
     
-        ######################### Fill Out ################################
+        
         # Send ACK 
         # ACK 문자열 뒤에 한칸 띄어쓰기하고 첫 번쨰 변수 그대로 보내기
         

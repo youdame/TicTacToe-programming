@@ -1,11 +1,7 @@
 '''
-  ETTTP_TicTacToe_skeleton.py
  
   34743-02 Information Communications
   Term Project on Implementation of Ewah Tic-Tac-Toe Protocol
- 
-  Skeleton Code Prepared by JeiHee Cho
-  May 24, 2023
  
  '''
 
@@ -237,9 +233,10 @@ class TTT(tk.Tk):
             loc = eval(loc_str)  # Convert the move location string to a tuple
 
             
-            # Convert the move location tuple to the corresponding index value
+            # Convert the move location tuple (row, col) to the corresponding index value in the board list
             row, col = loc
             loc = 3 * row + col
+
 
 
             # Send ACK message
@@ -274,6 +271,7 @@ class TTT(tk.Tk):
         
         # Extract the move location from the message
         loc_line = [line for line in d_msg.split("\r\n") if line.startswith("New-Move:")]
+
         if not loc_line:
             print("Invalid message format: Move location is missing")
             return
@@ -281,8 +279,12 @@ class TTT(tk.Tk):
         loc_str = loc_line[0].split(":")[1].strip()
         loc = eval(loc_str)  # Convert the move location string to a tuple
 
+        # Extract the row and column values from the move location tuple
         row, col = loc
+
+        # Convert the move location tuple (row, col) to the corresponding index value in the board list
         loc = 3 * row + col
+
         
         
         # Check if the selected location is already taken or not
@@ -324,25 +326,29 @@ class TTT(tk.Tk):
         #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
         
-    def send_move(self,selection):
+    def send_move(self, selection):
         '''
         Function to send message to peer using button click
         selection indicates the selected button
         '''
-        row,col = divmod(selection,3)
-        ###################  Fill Out  #######################
 
-        # send message and check ACK
-        message = "SEND ETTTP/1.0\r\nHost:127.0.0.1\r\nNew-Move:("+str(row)+","+str(col)+")\r\n\r\n"  
+        # Convert the selection value to row and column indices
+        row, col = divmod(selection, 3)
+
+        # Create the ETTTP request message
+        message = "SEND ETTTP/1.0\r\nHost:127.0.0.1\r\nNew-Move:("+str(row)+","+str(col)+")\r\n\r\n"
+
+        # Send the message to the peer using TCP socket
         self.socket.send(message.encode())
 
+        # Receive acknowledgement from the peer
         ack = self.socket.recv(1024).decode()
 
+        # Check if the acknowledgement is received successfully
         if "ACK" not in ack:
             return False
-            
+
         return True
-        ######################################################  
 
     
     def check_result(self,winner,get=False):
@@ -350,9 +356,7 @@ class TTT(tk.Tk):
         Function to check if the result between peers are same
         get: if it is false, it means this user is winner and need to report the result first
         '''
-        # no skeleton
-        ###################  Fill Out  #######################
-
+        
         # 만약 get이 false일 경우
         if not get:
             # 자신이 이긴 것을 상대 플레이어에게 알리기 위해 패킷 전송
@@ -371,13 +375,12 @@ class TTT(tk.Tk):
 
         # 두 peer의 패킷이 같은지 확인 - 상대방과 나의 winner가 달라야 맞음
         ## 내가 이겼을 경우, 나는 ME라는 값을 상대에게 보내야 하고, 상대에게는 YOU라는 값이 나에게 전달되어야 함
-        # if send_packet == received_packet:
-        #    return False
+
             
         send_packet_msg = send_packet.split("Winner:")
         received_packet_msg = received_packet.split("Winner:")
 
-        if send_packet_msg[0] == received_packet_msg[0] and send_packet_msg[1] != received_packet_msg[1] :
+        if send_packet_msg[1] != received_packet_msg[1] :
             return True
         
         return False

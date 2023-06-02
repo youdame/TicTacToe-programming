@@ -1,13 +1,8 @@
 '''
-    0이면 서버 1이면 클라이언트 
-  ETTTP_Sever_skeleton.py
+  0이면 서버 1이면 클라이언트 
  
   34743-02 Information Communications
   Term Project on Implementation of Ewah Tic-Tac-Toe Protocol
- 
-  Skeleton Code Prepared by JeiHee Cho
-  May 24, 2023
- 
  '''
 
 import random
@@ -15,7 +10,7 @@ import tkinter as tk
 from socket import *
 import _thread
 
-from ETTTP_TicTacToe_skeleton import TTT, check_msg
+from ETTTP_TicTacToe import TTT, check_msg
 
     
 if __name__ == '__main__':
