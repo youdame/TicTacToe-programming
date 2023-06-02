@@ -243,7 +243,7 @@ class TTT(tk.Tk):
 
 
             # Send ACK message
-            ack_msg = f"ACK ETTTP/1.0\r\nHost:{self.recv_ip}\r\nNew-Move:{loc_str}\r\n\r\n"
+            ack_msg = f"ACK ETTTP/1.0\r\nHost:127.0.0.1\r\nNew-Move:{loc_str}\r\n\r\n"
             self.socket.send(ack_msg.encode())
 
             # Update board and change turn
@@ -286,7 +286,7 @@ class TTT(tk.Tk):
         '''
 
         # Create the ETTTP request message
-        message = f"SEND ETTTP/1.0\r\nHost:{self.send_ip}\r\nNew-Move:({row},{col})\r\n\r\n"
+        message = f"SEND ETTTP/1.0\r\nHost:127.0.0.1\r\nNew-Move:({row},{col})\r\n\r\n"
 
         # Send the message to the peer using TCP socket
         try:
@@ -331,7 +331,7 @@ class TTT(tk.Tk):
         message = "SEND ETTTP/1.0\r\nHost:127.0.0.1\r\nNew-Move:("+str(row)+","+str(col)+")\r\n\r\n"  
         self.socket.send(message.encode())
 
-        ack = self.socket.recv(SIZE).decode()
+        ack = self.socket.recv(1024).decode()
 
         if "ACK" not in ack:
             return False
