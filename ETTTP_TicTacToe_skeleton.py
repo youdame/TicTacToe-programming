@@ -268,6 +268,11 @@ class TTT(tk.Tk):
         d_msg = d_msg.replace("\\r\\n", "\r\n")   # Sanitize the message as \r\n may be modified when given as input
         self.t_debug.delete(1.0, "end")
 
+        # Check if the message is valid
+        if not check_msg(d_msg, self.recv_ip):
+            print("Invalid message format")
+            return
+        
         # Extract the move location from the message
         loc_line = [line for line in d_msg.split("\r\n") if line.startswith("New-Move:")]
         if not loc_line:
