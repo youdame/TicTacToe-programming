@@ -44,8 +44,13 @@ if __name__ == '__main__':
         ###################################################################
         
         # Receive ack - if ack is correct, start game
+        ack_msg = "ACK ETTTP/1.0\r\nHost: 127.0.0.1\r\nFirst-Move:"
+        if start == 0:
+            ack_msg += "YOU\r\n\r\n"
+        else:
+            ack_msg += "ME\r\n\r\n"
         ack = client_socket.recv(SIZE).decode()
-        if ack == "ACK":
+        if ack == ack_msg:
             print("Game started.")
         else:
             print("Error in receiving ack. Exiting...")
