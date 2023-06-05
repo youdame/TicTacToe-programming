@@ -25,12 +25,17 @@ if __name__ == '__main__':
     
     while True:
         client_socket, client_addr = server_socket.accept()
+            
+        # 클라이언트의 IP 주소 가져오기
+        client_ip = client_addr[0]
+
+        start = random.randrange(0, 2)
         
-        start = random.randrange(0,2)   # select random to start
-        
+       
         ###################################################################
         # Send start move information to peer
-        start_msg = "SEND ETTTP/1.0\r\nHost:127.0.0.1\r\nFirst-Move:"
+        start_msg = f"SEND ETTTP/1.0\r\nHost:{client_ip}\r\nFirst-Move:"
+        
         if start == 0:
             start_msg += "ME\r\n\r\n"
         else:
@@ -40,7 +45,7 @@ if __name__ == '__main__':
         ###################################################################
         
         # Receive ack - if ack is correct, start game
-        ack_msg = "ACK ETTTP/1.0\r\nHost:127.0.0.1\r\nFirst-Move:"
+        ack_msg = f"ACK ETTTP/1.0\r\nHost:{MY_IP}\r\nFirst-Move:"
         if start == 0:
             ack_msg += "YOU\r\n\r\n"
         else:
