@@ -240,7 +240,7 @@ class TTT(tk.Tk):
 
 
             # Send ACK message
-            ack_msg = f"ACK ETTTP/1.0\r\nHost:127.0.0.1\r\nNew-Move:{loc_str}\r\n\r\n"
+            ack_msg = f"ACK ETTTP/1.0\r\nHost:{self.recv_ip}\r\nNew-Move:{loc_str}\r\n\r\n"
             self.socket.send(ack_msg.encode())
 
         # Update board and change turn
@@ -293,7 +293,7 @@ class TTT(tk.Tk):
             return
 
         # Create the ETTTP request message
-        message = f"SEND ETTTP/1.0\r\nHost:127.0.0.1\r\nNew-Move:{loc_str}\r\n\r\n"
+        message = f"SEND ETTTP/1.0\r\nHost:{self.recv_ip}\r\nNew-Move:{loc_str}\r\n\r\n"
 
         # Send the message to the peer using TCP socket
         try:
@@ -337,7 +337,7 @@ class TTT(tk.Tk):
         row, col = divmod(selection, 3)
 
         # Create the ETTTP request message
-        message = "SEND ETTTP/1.0\r\nHost:127.0.0.1\r\nNew-Move:("+str(row)+","+str(col)+")\r\n\r\n"
+        message = f"SEND ETTTP/1.0\r\nHost:{self.recv_ip}\r\nNew-Move:("+str(row)+","+str(col)+")\r\n\r\n"
 
         # Send the message to the peer using TCP socket
         self.socket.send(message.encode())
@@ -361,7 +361,7 @@ class TTT(tk.Tk):
         # 만약 get이 false일 경우
         if not get:
             # 자신이 이긴 것을 상대 플레이어에게 알리기 위해 패킷 전송
-            send_packet = "RESULT ETTTP/1.0\r\nHost:127.0.0.1\r\nWinner:"+winner+"\r\n\r\n"
+            send_packet = f"RESULT ETTTP/1.0\r\nHost:{self.recv_ip}\r\nWinner:"+winner+"\r\n\r\n"
             self.socket.send(send_packet.encode())
             # 상대에게 결과 패킷을 받음
             received_packet = self.socket.recv(SIZE).decode()
@@ -371,7 +371,7 @@ class TTT(tk.Tk):
             # 먼저 상대방에게 결과 패킷을 받음
             received_packet = self.socket.recv(SIZE).decode()
             # 자신의 결과를 담은 패킷을 상대에게 전송
-            send_packet = "RESULT ETTTP/1.0\r\nHost:127.0.0.1\r\nWinner:"+winner+"\r\n\r\n"
+            send_packet = f"RESULT ETTTP/1.0\r\nHost:{self.recv_ip}\r\nWinner:"+winner+"\r\n\r\n"
             self.socket.send(send_packet.encode())
 
         # 두 peer의 패킷이 같은지 확인 - 상대방과 나의 winner가 달라야 맞음

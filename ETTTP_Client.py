@@ -46,10 +46,10 @@ if __name__ == '__main__':
             
         if value == "YOU":
             start = 1
-            ack_message = "ETTTP/1.0\r\nHost:127.0.0.1\r\nFirst-Move:ME\r\n\r\n"
+            ack_message = f"ETTTP/1.0\r\nHost:{SERVER_IP}\r\nFirst-Move:ME\r\n\r\n"
         elif value == "ME":
             start = 0
-            ack_message = "ETTTP/1.0\r\nHost:127.0.0.1\r\nFirst-Move:YOU\r\n\r\n"
+            ack_message = f"ETTTP/1.0\r\nHost:{SERVER_IP}\r\nFirst-Move:YOU\r\n\r\n"
     
         
         # Send ACK 
